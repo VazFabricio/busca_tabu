@@ -22,7 +22,7 @@ public class TabuSearchKnapsack {
     public static void main(String[] args) {
 
         ////
-        File filePath = new File("D:\\JavaProjects\\Busca_Tabu\\src\\KNAPDATA40.txt");
+        File filePath = new File("src\\KNAPDATA40.txt");
 
         // Lista para armazenar os itens
         Item[] items = null;
