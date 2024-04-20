@@ -11,7 +11,7 @@ public class TabuSearchKnapsack {
 
     public static void main(String[] args) {
 
-        File filePath = new File("src\\KNAPDATA10000.txt");
+        File filePath = new File("src\\KNAPDATA1000.txt");
 
         // Lista para armazenar os itens
         Item[] items = null;
