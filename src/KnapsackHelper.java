@@ -27,38 +27,37 @@ public class KnapsackHelper {
         }
 
         if (totalWeight > capacity) {
-            System.out.println(totalWeight +"/"+totalValue);
+            //System.out.println(totalWeight +"/"+totalValue);
             return 0;
         }
+        //System.out.println(totalWeight +"/"+totalValue);
         return totalValue;
     }
-
-    // Função para gerar vizinhos (opções de movimento) para uma solução dada
-    static List<int[]> generate_similar_neighbors(int[] solution, int maxChanges) {
+    static List<int[]> generate_neighbors(int[] solution, Item[] items, int capacity) {
         List<int[]> neighbors = new ArrayList<>();
         int n = solution.length;
 
         for (int i = 0; i < n; i++) {
             for (int j = i + 1; j < n; j++) {
                 int[] neighbor = Arrays.copyOf(solution, n);
-                int changes = 0; // Contador de alterações feitas no vizinho
-                if (changes < maxChanges) {
-                    neighbor[i] = (neighbor[i] == 0) ? 1 : 0; // Inverte o item i
-                    changes++;
+                neighbor[i] = (neighbor[i] == 0) ? 1 : 0; // Inverte o item i
+                neighbor[j] = (neighbor[j] == 0) ? 1 : 0; // Inverte o item j
+                if (isValidNeighbor(neighbor, items, capacity)) {
+                    neighbors.add(neighbor);
                 }
-                if (changes < maxChanges) {
-                    neighbor[j] = (neighbor[j] == 0) ? 1 : 0; // Inverte o item j
-                    changes++;
-                }
-                neighbors.add(neighbor);
             }
         }
         return neighbors;
     }
 
-    // Função para gerar todos os vizinhos possíveis
-    static List<int[]> generate_neighbors(int[] solution) {
-        // Chamamos generate_similar_neighbors com maxChanges = 2 para obter todos os vizinhos possíveis
-        return generate_similar_neighbors(solution, 2);
+    // Função auxiliar para verificar se um vizinho é válido
+    static boolean isValidNeighbor(int[] neighbor, Item[] items, int capacity) {
+        int totalWeight = 0;
+        for (int i = 0; i < neighbor.length; i++) {
+            if (neighbor[i] == 1) {
+                totalWeight += items[i].weight;
+            }
+        }
+        return totalWeight <= capacity;
     }
 }
