@@ -11,7 +11,6 @@ public class TabuSearchKnapsack {
 
     public static void main(String[] args) {
 
-        ////
         File filePath = new File("src\\KNAPDATA40.txt");
 
         // Lista para armazenar os itens
@@ -24,10 +23,10 @@ public class TabuSearchKnapsack {
         // Leitura do arquivo
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             // Lendo o tamanho da população
-            capacity = Integer.parseInt(br.readLine());
+            maxIterations = Integer.parseInt(br.readLine());
 
             // Lendo a capacidade da mochila
-            maxIterations = Integer.parseInt(br.readLine());
+            capacity = Integer.parseInt(br.readLine());
 
             int numItems = 0;
             while (br.readLine() != null) {
@@ -47,7 +46,7 @@ public class TabuSearchKnapsack {
                 Scanner scanner = new Scanner(line);
                 scanner.useDelimiter(",");
                 scanner.next(); // Ignora o nome do item
-                int weight = scanner.nextInt();
+                int weight  = scanner.nextInt();
                 int value = scanner.nextInt();
                 items[i] = new Item(weight, value);
                 scanner.close();
@@ -55,7 +54,6 @@ public class TabuSearchKnapsack {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
         // Parâmetros da Busca Tabu
         int tabuSize = 5;
@@ -83,9 +81,17 @@ public class TabuSearchKnapsack {
 
     // Função para implementar a Busca Tabu para o Problema da Mochila
     static int[] tabu_search_knapsack(Item[] items, int capacity, int tabuSize, int maxIterations) {
-        int[] currentSolution = KnapsackHelper.generate_random_solution(items.length);
+        //int[] currentSolution = KnapsackHelper.generate_random_solution(items.length);
+        int[] currentSolution = {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         int[] bestSolution = Arrays.copyOf(currentSolution, currentSolution.length);
         int currentCost = KnapsackHelper.cost_function(currentSolution, items, capacity);
+//        while (currentCost == 0) {
+//            currentSolution = KnapsackHelper.generate_random_solution(items.length);
+//            currentCost = KnapsackHelper.cost_function(currentSolution, items, capacity);
+//            //System.out.println(currentCost);
+//        }
+
+
         int bestCost = currentCost;
         List<int[]> tabuList = new LinkedList<>();
 
@@ -100,6 +106,8 @@ public class TabuSearchKnapsack {
                     if (neighborCost > nextCost) {
                         nextSolution = neighbor;
                         nextCost = neighborCost;
+                    } else {
+                        tabuList.add(neighbor);
                     }
                 }
             }
@@ -108,8 +116,10 @@ public class TabuSearchKnapsack {
                 break;
             }
 
-            currentSolution = nextSolution;
-            currentCost = nextCost;
+            if(nextCost>currentCost){
+                currentSolution = nextSolution;
+                currentCost = nextCost;
+            }
 
             if (currentCost > bestCost) {
                 bestSolution = Arrays.copyOf(currentSolution, currentSolution.length);
@@ -126,4 +136,5 @@ public class TabuSearchKnapsack {
     }
 
 }
+
 
