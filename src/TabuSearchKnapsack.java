@@ -11,7 +11,7 @@ public class TabuSearchKnapsack {
 
     public static void main(String[] args) {
 
-        File filePath = new File("src\\KNAPDATA40.txt");
+        File filePath = new File("src\\KNAPDATA10000.txt");
 
         // Lista para armazenar os itens
         Item[] items = null;
@@ -23,11 +23,10 @@ public class TabuSearchKnapsack {
         // Leitura do arquivo
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             // Lendo o tamanho da população
-            maxIterations = Integer.parseInt(br.readLine());
+            capacity  = Integer.parseInt(br.readLine());
 
             // Lendo a capacidade da mochila
-            capacity = Integer.parseInt(br.readLine());
-
+            maxIterations = Integer.parseInt(br.readLine());
             int numItems = 0;
             while (br.readLine() != null) {
                 numItems++;
@@ -58,7 +57,7 @@ public class TabuSearchKnapsack {
         // Parâmetros da Busca Tabu
         int tabuSize = 5;
         maxIterations = 1000;
-
+        System.out.println(capacity);
         assert items != null;
         int[] solution = tabu_search_knapsack(items, capacity, tabuSize, maxIterations);
         int peso_total = 0;
@@ -81,15 +80,15 @@ public class TabuSearchKnapsack {
 
     // Função para implementar a Busca Tabu para o Problema da Mochila
     static int[] tabu_search_knapsack(Item[] items, int capacity, int tabuSize, int maxIterations) {
-        int[] currentSolution = KnapsackHelper.generate_random_solution(items.length);
+        int[] currentSolution = KnapsackHelper.generate_guided_random_solution(items, capacity);
         int[] bestSolution = Arrays.copyOf(currentSolution, currentSolution.length);
         int currentCost = KnapsackHelper.cost_function(currentSolution, items, capacity);
         while (currentCost == 0) {
-            currentSolution = KnapsackHelper.generate_random_solution(items.length);
+            currentSolution = KnapsackHelper.generate_guided_random_solution(items, capacity);
             currentCost = KnapsackHelper.cost_function(currentSolution, items, capacity);
             System.out.println(currentCost);
         }
-
+        System.out.println("Primeiro custo: " + currentCost);
 
         int bestCost = currentCost;
         List<int[]> tabuList = new LinkedList<>();

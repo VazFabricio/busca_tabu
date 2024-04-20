@@ -5,12 +5,38 @@ import java.util.Random;
 
 public class KnapsackHelper {
     // Função para gerar uma solução inicial aleatória
-    static int[] generate_random_solution(int size) {
-        int[] solution = new int[size];
+//    static int[] generate_random_solution(int size) {
+//        int[] solution = new int[size];
+//        Random rand = new Random();
+//        for (int i = 0; i < size; i++) {
+//            solution[i] = rand.nextInt(2); // 0 ou 1 (selecionado ou não selecionado)
+//        }
+//        return solution;
+//    }
+
+    static int[] generate_guided_random_solution(Item[] items, int capacity) {
+        int[] solution = new int[items.length];
         Random rand = new Random();
-        for (int i = 0; i < size; i++) {
-            solution[i] = rand.nextInt(2); // 0 ou 1 (selecionado ou não selecionado)
+
+        // Selecionando todos os itens inicialmente
+        Arrays.fill(solution, 1);
+
+        // Calculando o peso total da solução inicial
+        int totalWeight = 0;
+        for (Item item : items) {
+            totalWeight += item.weight;
         }
+
+        // Reduzindo o número de itens selecionados se o peso total exceder a capacidade
+        while (totalWeight > capacity) {
+            // Selecionamos um item aleatório para remover
+            int indexToRemove = rand.nextInt(items.length);
+            if (solution[indexToRemove] == 1) {
+                solution[indexToRemove] = 0;
+                totalWeight -= items[indexToRemove].weight;
+            }
+        }
+        System.out.println(totalWeight);
         return solution;
     }
 
