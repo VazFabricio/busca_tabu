@@ -4,15 +4,6 @@ import java.util.List;
 import java.util.Random;
 
 public class KnapsackHelper {
-    // Função para gerar uma solução inicial aleatória
-//    static int[] generate_random_solution(int size) {
-//        int[] solution = new int[size];
-//        Random rand = new Random();
-//        for (int i = 0; i < size; i++) {
-//            solution[i] = rand.nextInt(2); // 0 ou 1 (selecionado ou não selecionado)
-//        }
-//        return solution;
-//    }
 
     static int[] generate_guided_random_solution(Item[] items, int capacity) {
         int[] solution = new int[items.length];
@@ -59,6 +50,25 @@ public class KnapsackHelper {
         //System.out.println(totalWeight +"/"+totalValue);
         return totalValue;
     }
+
+    static List<int[]> generate_limited_neighbors(int[] solution, Item[] items, int capacity, int limit) {
+        List<int[]> neighbors = new ArrayList<>();
+        int n = solution.length;
+        Random rand = new Random();
+
+        for (int count = 0; count < limit; count++) {
+            int[] neighbor = Arrays.copyOf(solution, n);
+            int i = rand.nextInt(n);
+            int j = rand.nextInt(n);
+            neighbor[i] = (neighbor[i] == 0) ? 1 : 0; // Inverte o item i
+            neighbor[j] = (neighbor[j] == 0) ? 1 : 0; // Inverte o item j
+            if (isValidNeighbor(neighbor, items, capacity)) {
+                neighbors.add(neighbor);
+            }
+        }
+        return neighbors;
+    }
+
     static List<int[]> generate_neighbors(int[] solution, Item[] items, int capacity) {
         List<int[]> neighbors = new ArrayList<>();
         int n = solution.length;

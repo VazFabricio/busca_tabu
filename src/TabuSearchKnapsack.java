@@ -1,3 +1,4 @@
+import java.sql.SQLOutput;
 import java.util.*;
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,21 +12,18 @@ public class TabuSearchKnapsack {
 
     public static void main(String[] args) {
 
-        File filePath = new File("src\\KNAPDATA1000.txt");
+        File filePath = new File("src\\KNAPDATA100000.txt");
 
-        // Lista para armazenar os itens
         Item[] items = null;
 
-        // Variável para armazenar o número máximo de iterações
         int maxIterations = 0;
         int capacity = 0;
 
-        // Leitura do arquivo
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            // Lendo o tamanho da população
+
             capacity  = Integer.parseInt(br.readLine());
 
-            // Lendo a capacidade da mochila
+
             maxIterations = Integer.parseInt(br.readLine());
             int numItems = 0;
             while (br.readLine() != null) {
@@ -35,7 +33,7 @@ public class TabuSearchKnapsack {
             br.close();
 
             BufferedReader brItems = new BufferedReader(new FileReader(filePath));
-            // Ignorando as duas primeiras linhas
+
             brItems.readLine();
             brItems.readLine();
 
@@ -95,7 +93,8 @@ public class TabuSearchKnapsack {
 
         for (int iter = 0; iter < maxIterations; iter++) {
             System.out.println(iter);
-            List<int[]> neighbors = KnapsackHelper.generate_neighbors(currentSolution, items, capacity);
+            //List<int[]> neighbors = KnapsackHelper.generate_neighbors(currentSolution, items, capacity);
+            List<int[]> neighbors = KnapsackHelper.generate_limited_neighbors(currentSolution, items, capacity, 40);
             int[] nextSolution = null;
             int nextCost = 0;
 
@@ -112,6 +111,7 @@ public class TabuSearchKnapsack {
             }
 
             if (nextSolution == null) {
+                System.out.println("NÃO ACHOU NENHUMA MELHOR");
                 break;
             }
             if(nextCost>currentCost){
